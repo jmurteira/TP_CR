@@ -3,6 +3,20 @@ package com.sample;
 public class Items {
 	String nome;
 	String tipo;
+	String sexo;
+	int preco;
+	public int getPreco() {
+		return preco;
+	}
+	public void setPreco(int preco) {
+		this.preco = preco;
+	}
+	public String getSexo() {
+		return sexo;
+	}
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
 	Integer quant;
 	public String getNome() {
 		return nome;

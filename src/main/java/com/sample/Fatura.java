@@ -2,7 +2,7 @@ package com.sample;
 
 public class Fatura {
 	int nItems;
-	int PrecoTotal;
+	float PrecoTotal;
 	
 	public Fatura(int nItems, int precoTotal) {
 		super();
@@ -15,7 +15,7 @@ public class Fatura {
 	public void setnItems(int nItems) {
 		this.nItems = nItems;
 	}
-	public int getPrecoTotal() {
+	public float getPrecoTotal() {
 		return PrecoTotal;
 	}
 	public void setPrecoTotal(int precoTotal) {

@@ -37,5 +37,3 @@ public class Items {
 		this.quant = quant;
 	}
 }
-
-//caralho

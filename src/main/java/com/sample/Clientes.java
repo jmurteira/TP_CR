@@ -5,6 +5,7 @@ public class Clientes {
 	String sexo;
 	String estado_civil;
 	Boolean filhos;
+	
 	public String getNome() {
 		return nome;
 	}

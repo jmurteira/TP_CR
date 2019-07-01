@@ -5,6 +5,14 @@ public class Clientes {
 	String sexo;
 	String estado_civil;
 	Boolean filhos;
+		
+	public Clientes(String nome, String sexo, String estado_civil, Boolean filhos) {
+		super();
+		this.nome = nome;
+		this.sexo = sexo;
+		this.estado_civil = estado_civil;
+		this.filhos = filhos;
+	}
 	public String getNome() {
 		return nome;
 	}

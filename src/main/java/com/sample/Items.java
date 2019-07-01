@@ -4,20 +4,15 @@ public class Items {
 	String nome;
 	String tipo;
 	String sexo;
-	int preco;
-	public int getPreco() {
-		return preco;
-	}
-	public void setPreco(int preco) {
+	float preco;
+	
+	public Items(String nome, String tipo, String sexo, float preco) {
+		super();
+		this.nome = nome;
+		this.tipo = tipo;
+		this.sexo = sexo;
 		this.preco = preco;
 	}
-	public String getSexo() {
-		return sexo;
-	}
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
-	}
-	Integer quant;
 	public String getNome() {
 		return nome;
 	}
@@ -30,10 +25,17 @@ public class Items {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	public Integer getQuant() {
-		return quant;
+	public String getSexo() {
+		return sexo;
 	}
-	public void setQuant(Integer quant) {
-		this.quant = quant;
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
 	}
+	public float getPreco() {
+		return preco;
+	}
+	public void setPreco(float preco) {
+		this.preco = preco;
+	}
+	
 }

@@ -37,5 +37,5 @@ public class Items {
 	public void setPreco(float preco) {
 		this.preco = preco;
 	}
-	
+
 }

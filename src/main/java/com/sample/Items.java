@@ -4,6 +4,7 @@ public class Items {
 	String nome;
 	String tipo;
 	Integer quant;
+	
 	public String getNome() {
 		return nome;
 	}

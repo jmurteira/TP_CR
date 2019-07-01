@@ -2,14 +2,24 @@
 import com.sample.Clientes;
 import com.sample.Items;
 import com.sample.Fatura;
-//list any import classes here.
+import java.util.Scanner;
+
 
 
 
 //declare any global variables here
 
-
-
+rule "Cliente escolhe item"
+	salience 100
+	when
+		$i:Items( sexo == "masculino" || sexo == "feminino")
+	then
+		if($i.getId() == 1)
+			System.out.println("Escolher um item da lista: ");
+		
+		System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());
+				
+end	
 
 rule "Clientes Masculinos"
     when
@@ -18,11 +28,4 @@ rule "Clientes Masculinos"
         System.out.println("Nome do Cliente: " + $c.getNome());
 end
 
-rule "Your Second Rule"
-    //include attributes such as "salience" here...
-    when
-        //conditions
-    then
-        //actions
 
-end

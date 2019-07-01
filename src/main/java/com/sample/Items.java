@@ -1,17 +1,27 @@
 package com.sample;
 
 public class Items {
+	int id; //id do item
 	String nome;
 	String tipo;
 	String sexo;
 	float preco;
+	int stock;
 	
-	public Items(String nome, String tipo, String sexo, float preco) {
-		super();
-		this.nome = nome;
-		this.tipo = tipo;
-		this.sexo = sexo;
-		this.preco = preco;
+	public Items(int id, String nome, String tipo, String sexo, float preco, int stock) {
+	super();
+	this.id = id;
+	this.nome = nome;
+	this.tipo = tipo;
+	this.sexo = sexo;
+	this.preco = preco;
+	this.stock = stock;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getNome() {
 		return nome;
@@ -37,5 +47,12 @@ public class Items {
 	public void setPreco(float preco) {
 		this.preco = preco;
 	}
+	public int getStock() {
+		return stock;
+	}
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+
 
 }

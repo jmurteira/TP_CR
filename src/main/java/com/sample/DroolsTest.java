@@ -17,6 +17,12 @@ public class DroolsTest {
         	KieSession kSession = kContainer.newKieSession("ksession-rules");
 
             // go !
+        	Clientes c1 = new Clientes("joao","masculino","solteiro",false);
+        	kSession.insert(c1 );
+        	
+        	Items i1 = new Items("casaco","adulto","masculino",(float)39.99);
+        	kSession.insert(i1 );
+        	
             kSession.fireAllRules();
         } catch (Throwable t) {
             t.printStackTrace();

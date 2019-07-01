@@ -1,6 +1,7 @@
 //created on: 01-Jul-2019
 import com.sample.Clientes;
 import com.sample.Items;
+import com.sample.Fatura;
 //list any import classes here.
 
 
@@ -10,13 +11,11 @@ import com.sample.Items;
 
 
 
-rule "Your First Rule"
-
+rule "Clientes Masculinos"
     when
-        //conditions
+    	$c:Clientes( sexo == "masculino" )
     then
-        //actions
-
+        System.out.println("Nome do Cliente: " + $c.getNome());
 end
 
 rule "Your Second Rule"

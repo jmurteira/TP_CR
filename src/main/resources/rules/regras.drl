@@ -31,32 +31,35 @@ rule "Cliente escolhe item"
 		$i:Items( sexo == "masculino" || sexo == "feminino")
 		
 	then
-		if($i.getId() == 1)
-			System.out.println("Escolher um item da lista: ");
-		
-		System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());
-		
-		String s;
+				
+		char resposta;
 		System.out.println("Deseja escolher algum item da lista? (S/N)");
 		Scanner ler = new Scanner(System.in);
-        s = ler.next();
+        resposta = (char)System.in.read();
 		
-		if(s=="N")
+		if(resposta == 'N')
         {
+        	System.out.println("Obrigado N");
         	System.exit(0);
         }
-        else
+        if(resposta == 'S')
         {
-        	System.out.println("Obrigado");
+			System.out.println("Escolher um item da lista: ");
+		
+			System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());        	
+        	
         }
+		
+		
 
 end	
 
+/*
 rule "Clientes Masculinos"
     when
     	$c:Clientes( sexo == "masculino" )
     then
         //System.out.println("Nome do Cliente: " + $c.getNome());
 end
-
+*/
 

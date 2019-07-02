@@ -6,32 +6,11 @@ import java.util.Scanner;
 
 
 
-
 //declare any global variables here
 
-/*rule "Deseja efetuar compra?"
-salience 100
-	then
-		String s;
-		System.out.println("Deseja iniciar uma compra? (S/N)");
-     	Scanner ler = new Scanner(System.in);
-        s = ler.next();
-        
-        if(s=="N")
-        {
-        	System.exit(0);
-        }
-end
-*/
-
-rule "Cliente escolhe item"
+rule "Deseja comprar algo?"
 	salience 90
-	when
-		//s=="S"
-		$i:Items( sexo == "masculino" || sexo == "feminino")
-		
 	then
-				
 		char resposta;
 		System.out.println("Deseja escolher algum item da lista? (S/N)");
 		Scanner ler = new Scanner(System.in);
@@ -39,19 +18,25 @@ rule "Cliente escolhe item"
 		
 		if(resposta == 'N')
         {
-        	System.out.println("Obrigado N");
+        	System.out.println("Obrigado pela sua visita!");
         	System.exit(0);
         }
         if(resposta == 'S')
         {
-			System.out.println("Escolher um item da lista: ");
-		
-			System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());        	
+        
+        	//criar fatura nova
+        	insert ( new Fatura(0,0) );    	
         	
-        }
-		
-		
+        }	
+end
 
+rule "Mostrar items disponíveis"
+	salience 80
+	when
+		exists Fatura()
+		$i:Items( ( sexo == "masculino" || sexo == "feminino" ) && stock > 0)		
+	then		
+		System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());        	
 end	
 
 /*

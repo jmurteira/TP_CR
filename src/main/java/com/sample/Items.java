@@ -7,15 +7,16 @@ public class Items {
 	String sexo;
 	float preco;
 	int stock;
-	
-	public Items(int id, String nome, String tipo, String sexo, float preco, int stock) {
-	super();
-	this.id = id;
-	this.nome = nome;
-	this.tipo = tipo;
-	this.sexo = sexo;
-	this.preco = preco;
-	this.stock = stock;
+	int complementar;
+	public Items(int id, String nome, String tipo, String sexo, float preco, int stock, int complementar) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.tipo = tipo;
+		this.sexo = sexo;
+		this.preco = preco;
+		this.stock = stock;
+		this.complementar = complementar;
 	}
 	public int getId() {
 		return id;
@@ -53,6 +54,11 @@ public class Items {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-
-
+	public int getComplementar() {
+		return complementar;
+	}
+	public void setComplementar(int complementar) {
+		this.complementar = complementar;
+	}
+		
 }

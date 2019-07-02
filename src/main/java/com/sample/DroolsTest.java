@@ -17,8 +17,7 @@ public class DroolsTest {
         	KieSession kSession = kContainer.newKieSession("ksession-rules");
 
             // go !
-        	Clientes c1 = new Clientes("joao","masculino","solteiro",false);
-        	kSession.insert(c1 );
+        	
         	
         	Items i1 = new Items(1,"Casaco","adulto","masculino",(float)40.00, 15, 0);
         	Items i2 = new Items(2,"Sapatos","adulto","feminino",(float)50.00, 25, 6);

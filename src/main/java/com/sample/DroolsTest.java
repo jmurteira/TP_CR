@@ -27,6 +27,10 @@ public class DroolsTest {
         	kSession.insert(i2);
         	kSession.insert(i1);
         	
+        	//criar fatura nova
+        	Fatura f = new Fatura(0,0);
+        	kSession.insert(f);
+        	
             kSession.fireAllRules();
         } catch (Throwable t) {
             t.printStackTrace();

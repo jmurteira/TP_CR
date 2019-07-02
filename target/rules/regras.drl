@@ -28,22 +28,24 @@ rule "Deseja comprar algo?"
         
         	//criar fatura nova
         	insert ( new Fatura(0,0) );
+        	//drools.setFocus("Mostrar");  
         	
         }	
 end
 
 rule "Mostrar items disponíveis"
+	//agenda-group "Mostrar"
 	salience 80
 	when
 		exists Fatura()
 		$i:Items( ( sexo == "masculino" || sexo == "feminino" ) && stock > 0)		
 	then		
-		System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());        	
+		System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());
+		   	
 end
 
 rule "Escolher Item"
 	salience 70
-	agenda-group "EscolherItem"
 	when
 		exists Fatura()
 	then		
@@ -51,9 +53,14 @@ rule "Escolher Item"
 		System.out.printf("Informe um Número Inteiro: ");
 		Scanner ler = new Scanner(System.in);
 		id = ler.nextInt();
+		
+		
 			
 end
 
+rule "Atualiza Fatura"
+
+/*
 rule "Escolher Mais?"
 	salience 60
 	when
@@ -70,12 +77,14 @@ rule "Escolher Mais?"
         }
         if(resposta == 'S')
         {
-        
-        	drools.setFocus("EscolherItem");
+        	
+        	System.out.printf("SIM");        
+        	drools.setFocus("Mostrar");
         	
         }
 			
 end
+*/
 
 /*
 rule "Clientes Masculinos"

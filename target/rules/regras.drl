@@ -9,23 +9,54 @@ import java.util.Scanner;
 
 //declare any global variables here
 
+/*rule "Deseja efetuar compra?"
+salience 100
+	then
+		String s;
+		System.out.println("Deseja iniciar uma compra? (S/N)");
+     	Scanner ler = new Scanner(System.in);
+        s = ler.next();
+        
+        if(s=="N")
+        {
+        	System.exit(0);
+        }
+end
+*/
+
 rule "Cliente escolhe item"
-	salience 100
+	salience 90
 	when
+		//s=="S"
 		$i:Items( sexo == "masculino" || sexo == "feminino")
+		
 	then
 		if($i.getId() == 1)
 			System.out.println("Escolher um item da lista: ");
 		
 		System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());
-				
+		
+		String s;
+		System.out.println("Deseja escolher algum item da lista? (S/N)");
+		Scanner ler = new Scanner(System.in);
+        s = ler.next();
+		
+		if(s=="N")
+        {
+        	System.exit(0);
+        }
+        else
+        {
+        	System.out.println("Obrigado");
+        }
+
 end	
 
 rule "Clientes Masculinos"
     when
     	$c:Clientes( sexo == "masculino" )
     then
-        System.out.println("Nome do Cliente: " + $c.getNome());
+        //System.out.println("Nome do Cliente: " + $c.getNome());
 end
 
 

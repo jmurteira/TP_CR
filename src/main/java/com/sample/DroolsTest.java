@@ -3,6 +3,7 @@ package com.sample;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import java.util.Scanner;
 
 /**
  * This is a sample class to launch a rule.
@@ -15,6 +16,7 @@ public class DroolsTest {
 	        KieServices ks = KieServices.Factory.get();
     	    KieContainer kContainer = ks.getKieClasspathContainer();
         	KieSession kSession = kContainer.newKieSession("ksession-rules");
+        	String s;
 
             // go !
         	Clientes c1 = new Clientes("joao","masculino","solteiro",false);
@@ -27,9 +29,15 @@ public class DroolsTest {
         	kSession.insert(i2);
         	kSession.insert(i1);
         	
+        	        	
+        	
+        	
         	//criar fatura nova
         	Fatura f = new Fatura(0,0);
         	kSession.insert(f);
+        	
+        	
+        	
         	
             kSession.fireAllRules();
         } catch (Throwable t) {

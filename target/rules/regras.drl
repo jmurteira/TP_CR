@@ -89,6 +89,15 @@ when
 		char resposta;
 		System.out.println("Deseja escolher algum item? (S/N)");
         resposta = (char)System.in.read();
+		System.in.read(new byte[System.in.available()]);
+		
+		   while (resposta != 's' && resposta != 'n' && resposta != 'S' && resposta != 'N')
+        	{
+        		System.out.println("Introduza carater válido! (s/n)");
+            	resposta = (char)System.in.read();
+        		System.in.read(new byte[System.in.available()]);
+           	}
+		
 		
 		if(resposta == 'N' || resposta == 'n')
         {
@@ -100,13 +109,14 @@ when
         
         	//criar fatura nova
         	insert ( new Fatura(0,0,0,false,false) );
-        	//drools.setFocus("Mostrar");        	
+        	drools.setFocus("Mostrar");        	
         }	
 end
 
 rule "Mostrar items disponíveis"
-	//agenda-group "Mostrar"
-	salience 80
+no-loop
+	agenda-group "Mostrar"
+	//salience 80
 	when
 		exists Fatura()
 		$c:Clientes()
@@ -117,7 +127,7 @@ end
 
 rule "Escolher Item"
 no-loop
-	salience 70
+	salience 71
 	when
 		$f:Fatura()
 	then		
@@ -126,15 +136,14 @@ no-loop
 		Scanner ler = new Scanner(System.in);
 		id = ler.nextInt();
 		
-		if ( id != 0 )
-		{		
+		//if ( id != 0 )
+		//{		
 			$f.setIdAtual(id);
 			update($f);
 			drools.setFocus("Verifica");
-		}
+		//}
 		
-		//System.out.printf("ID FATURA: " + $f.getIdAtual());
-		
+		//System.out.printf("ID FATURA: " + $f.getIdAtual());	
 end
 /*
 rule "Verifica Stock"
@@ -152,15 +161,6 @@ then
 		drools.setFocus("Atualiza");
 end
 */
-rule "Não Verifica Stock"
-salience 69
-when
-	$f:Fatura()
-	$c:Clientes()
-	$i:Items( id == $f.getIdAtual() && $i.getStock() == 0 )
-then
-	System.out.printf("\nIntroduziu um item que não está disponível, finalizando assim a compra.");	
-end
 
 rule "Verifica Stock"
 agenda-group "Verifica"
@@ -172,6 +172,18 @@ then
 	drools.setFocus("VerificaGen");
 end
 
+
+rule "Não Verifica Stock"
+salience 69
+when
+	$f:Fatura()
+	$c:Clientes()
+	$i:Items( id == $f.getIdAtual() && $i.getStock() == 0 )
+then
+	System.out.printf("\nIntroduziu um item que não está disponível.\n");
+	drools.setFocus("MaisItems");
+end
+
 rule "Não Verifica Genero"
 salience 68
 when
@@ -179,7 +191,8 @@ when
 	$c:Clientes()
 	$i:Items( id == $f.getIdAtual() && $i.getSexo() != $c.getSexo() )
 then
-	System.out.printf("\nIntroduziu um item que não corresponde ao seu género, finalizando assim a compra.");
+	System.out.printf("\nIntroduziu um item que não corresponde ao seu género.\n");
+	drools.setFocus("MaisItems");
 end
 
 
@@ -192,6 +205,18 @@ when
 then
 	drools.setFocus("Atualiza");
 end
+
+
+rule "Escolher mais Items"
+no-loop
+agenda-group "MaisItems"
+	when
+		$f:Fatura()
+	then		
+			update($f);
+			drools.setFocus("Mostrar");
+end
+
 
 rule "Atualiza Fatura e Stock"
 no-loop
@@ -339,8 +364,17 @@ then
         }
 end
 
-rule "Terminar Compra Vazia"
+rule "Cancelar compra"
 salience 2
+when
+	$f:Fatura( idAtual == 0)
+then
+	drools.setFocus("CancelaCompra");
+end
+
+
+rule "Terminar Compra Vazia"
+agenda-group "CancelaCompra"
 when
 	$f:Fatura( nItems == 0 )
 then
@@ -356,29 +390,3 @@ then
 	System.out.println("NUMERO DE ITEMS: " + $f.getnItems());
     System.out.println("PRECO TOTAL A PAGAR: " + $f.getPrecoTotal());
 end
-
-/*
-rule "Escolher Mais?"
-	salience 60
-	when
-		exists Fatura()
-	then		
-		char resposta;
-		System.out.println("Deseja escolher mais items da lista? (S/N)");
-		Scanner ler = new Scanner(System.in);
-        resposta = (char)System.in.read();
-		
-		if(resposta == 'N')
-        {
-        	// FINALIZAR COMPRA
-        }
-        if(resposta == 'S')
-        {
-        	
-        	System.out.printf("SIM");        
-        	drools.setFocus("Mostrar");
-        	
-        }
-			
-end
-*/

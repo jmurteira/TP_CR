@@ -108,7 +108,7 @@ when
         {
         
         	//criar fatura nova
-        	insert ( new Fatura(0,0,0,false,false) );
+        	insert ( new Fatura(0,0,0,false,false,false) );
         	drools.setFocus("Mostrar");        	
         }	
 end
@@ -136,11 +136,16 @@ no-loop
 		Scanner ler = new Scanner(System.in);
 		id = ler.nextInt();
 		
-		//if ( id != 0 )
-		//{		
+		if ( id != 0 )
+		{		
 			$f.setIdAtual(id);
 			update($f);
 			drools.setFocus("Verifica");
+		}
+		
+		//if ( id == 0)
+		//{
+		//	drools.setFocus("CancelaCompra");					
 		//}
 		
 		//System.out.printf("ID FATURA: " + $f.getIdAtual());	
@@ -165,7 +170,7 @@ end
 rule "Verifica Stock"
 agenda-group "Verifica"
 when
-	$f:Fatura()
+	$f:Fatura( idAtual != 0 )
 	$c:Clientes()
 	$i:Items( id == $f.getIdAtual() && $i.getStock() > 0 )
 then
@@ -176,7 +181,7 @@ end
 rule "Não Verifica Stock"
 salience 69
 when
-	$f:Fatura()
+	$f:Fatura( idAtual != 0 )
 	$c:Clientes()
 	$i:Items( id == $f.getIdAtual() && $i.getStock() == 0 )
 then
@@ -187,7 +192,7 @@ end
 rule "Não Verifica Genero"
 salience 68
 when
-	$f:Fatura()
+	$f:Fatura( idAtual != 0 && sexoOposto == false )
 	$c:Clientes()
 	$i:Items( id == $f.getIdAtual() && $i.getSexo() != $c.getSexo() )
 then
@@ -313,7 +318,7 @@ rule "Casado sem filhos?"
 no-loop
 salience 59
 when
-	$f:Fatura( nItems > 0 )
+	$f:Fatura( nItems > 0 && sexoOposto == false )
 	$c:Clientes( estado_civil == "casado" && filhos == false )
 	$i1:Items( id == $f.getIdAtual() )
 	$i2:Items( nome == $i1.getNome() && sexo != $i1.getSexo() )
@@ -327,7 +332,7 @@ then
         	$f.setIdAtual($i2.getId());
 			$f.setnItems($f.getnItems() + 1 );
 			$f.setPrecoTotal($f.getPrecoTotal() + $i2.getPreco() );
-			$f.setComplementar(true);
+			$f.setSexoOposto(true);
 			$i2.setStock($i2.getStock() - 1 );
 			update($f);
 			update($i2);
@@ -371,7 +376,6 @@ when
 then
 	drools.setFocus("CancelaCompra");
 end
-
 
 rule "Terminar Compra Vazia"
 agenda-group "CancelaCompra"

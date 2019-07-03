@@ -6,14 +6,17 @@ public class Fatura {
 	int idAtual;
 	boolean camisola;
 	boolean complementar;
+	boolean sexoOposto;
 	
-	public Fatura(int nItems, float precoTotal, int idAtual, boolean camisola, boolean complementar) {
+	public Fatura(int nItems, float precoTotal, int idAtual, boolean camisola, boolean complementar,
+			boolean sexoOposto) {
 		super();
 		this.nItems = nItems;
 		PrecoTotal = precoTotal;
 		this.idAtual = idAtual;
 		this.camisola = camisola;
 		this.complementar = complementar;
+		this.sexoOposto = sexoOposto;
 	}
 	public int getnItems() {
 		return nItems;
@@ -45,4 +48,12 @@ public class Fatura {
 	public void setComplementar(boolean complementar) {
 		this.complementar = complementar;
 	}
+	public boolean isSexoOposto() {
+		return sexoOposto;
+	}
+	public void setSexoOposto(boolean sexoOposto) {
+		this.sexoOposto = sexoOposto;
+	}
+	
+	
 }

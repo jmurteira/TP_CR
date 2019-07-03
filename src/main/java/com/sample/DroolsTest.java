@@ -19,16 +19,20 @@ public class DroolsTest {
             // go !
         	
         	
-        	Items i1 = new Items(1,"Casaco","adulto","masculino",(float)40.00, 0, 0);
+        	Items i1 = new Items(1,"Casaco","adulto","masculino",(float)40.00, 10, 4);
         	Items i2 = new Items(2,"Sapatos","adulto","feminino",(float)50.00, 25, 6);
         	Items i3 = new Items(3,"Ténis","adulto","masculino",(float)60.00, 12, 7);
-        	Items i4 = new Items(4,"Camisa","criança","ambos",(float)70.00, 3, 0);
-        	Items i5 = new Items(5,"Camisola","adulto","masculino",(float)70.00, 14, 0);
-        	Items i6 = new Items(6,"Meias de Vidro","adulto","feminino",(float)15.00, 35, 2);
+        	Items i4 = new Items(4,"Camisa","adulto","masculino",(float)70.00, 3, 1);
+        	Items i5 = new Items(5,"Camisola","adulto","masculino",(float)70.00, 14, 1);
+        	Items i6 = new Items(6,"Meias","adulto","feminino",(float)15.00, 35, 2);
         	Items i7 = new Items(7,"Meias","adulto","masculino",(float)10.00, 27, 3);
         	Items i8 = new Items(8,"Camisola Papa","criança","ambos",(float)15.00, 27, 0);
         	Items i9 = new Items(9,"Camisola Mamã","criança","ambos",(float)15.00, 27, 0);
-        	Items i10 = new Items(10,"Casaco","adulto","feminino",(float)40.00, 15, 0);
+        	Items i10 = new Items(10,"Casaco","adulto","feminino",(float)40.00, 20, 12);
+        	Items i11 = new Items(11,"Camisola","adulto","feminino",(float)70.00, 14, 10);
+        	Items i12 = new Items(12,"Camisa","adulto","feminino",(float)70.00, 3, 11);
+        	Items i13 = new Items(13,"Sapatos","adulto","masculino",(float)50.00, 25, 7);
+        	Items i14 = new Items(14,"Ténis","adulto","feminino",(float)60.00, 12, 6);
         	kSession.insert(i1);
         	kSession.insert(i2);
         	kSession.insert(i3);
@@ -39,6 +43,10 @@ public class DroolsTest {
         	kSession.insert(i8);
         	kSession.insert(i9);
         	kSession.insert(i10);
+        	kSession.insert(i11);
+        	kSession.insert(i12);
+        	kSession.insert(i13);
+        	kSession.insert(i14);
         	
             kSession.fireAllRules();
         } catch (Throwable t) {

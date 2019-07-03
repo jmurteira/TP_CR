@@ -28,6 +28,7 @@ public class DroolsTest {
         	Items i7 = new Items(7,"Meias","adulto","masculino",(float)10.00, 27, 3);
         	Items i8 = new Items(8,"Camisola Papa","criança","ambos",(float)15.00, 27, 0);
         	Items i9 = new Items(9,"Camisola Mamã","criança","ambos",(float)15.00, 27, 0);
+        	Items i10 = new Items(10,"Casaco","adulto","feminino",(float)40.00, 15, 0);
         	kSession.insert(i1);
         	kSession.insert(i2);
         	kSession.insert(i3);
@@ -37,6 +38,7 @@ public class DroolsTest {
         	kSession.insert(i7);
         	kSession.insert(i8);
         	kSession.insert(i9);
+        	kSession.insert(i10);
         	
             kSession.fireAllRules();
         } catch (Throwable t) {

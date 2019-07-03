@@ -118,7 +118,7 @@ no-loop
 	agenda-group "Mostrar"
 	//salience 80
 	when
-		exists Fatura()
+		exists Fatura( nItems == 0)
 		$c:Clientes()
 		$i:Items( ( sexo == $c.getSexo() ) && stock > 0 )
 	then		

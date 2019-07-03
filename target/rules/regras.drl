@@ -110,7 +110,7 @@ rule "Mostrar items disponíveis"
 	when
 		exists Fatura()
 		$c:Clientes()
-		$i:Items( ( sexo == $c.getSexo() ) && stock > 0)		
+		$i:Items( ( sexo == $c.getSexo() ) && stock > 0 )
 	then		
 		System.out.println("Item " + $i.getId() + ": " + $i.getNome() + " (para " + $i.getTipo() + ", " + $i.getSexo() + ")" + ", preço: " + $i.getPreco());	   	
 end
@@ -130,17 +130,31 @@ no-loop
 		{		
 			$f.setIdAtual(id);
 			update($f);
-			drools.setFocus("Atualiza");
+			drools.setFocus("Verifica");
 		}
 		
 		//System.out.printf("ID FATURA: " + $f.getIdAtual());
 		
 end
 
+rule "Verifica Stock"
+agenda-group "Verifica"
+when
+	$f:Fatura()
+	$c:Clientes()
+	$i:Items()
+then
+	if( $f.getIdAtual() == $i.getId() && $i.getStock() == 0 )
+		System.out.printf("\nIntroduzio um item que não está disponível, finalizando assim a compra.");
+	if( $f.getIdAtual() == $i.getId()  && $i.getSexo() != $c.getSexo() )
+		System.out.printf("\nIntroduzio um item que não corresponde ao seu género, finalizando assim a compra.");
+	if( $f.getIdAtual() == $i.getId() && $i.getStock() > 0 && $i.getSexo() == $c.getSexo() )
+		drools.setFocus("Atualiza");
+end
+
 rule "Atualiza Fatura e Stock"
 no-loop
 agenda-group "Atualiza"
-salience 69
 when
 	$f:Fatura( idAtual != 8 && idAtual != 9 )
 	$i:Items( id == $f.getIdAtual() )
@@ -157,20 +171,24 @@ then
 	System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());
 end
 
-rule "Tem filhos?"
+rule "Homem"
+no-loop
+salience 61
+when
+	$f:Fatura( nItems > 0 )
+	$c:Clientes( filhos == true && sexo == "masculino")
+then
+	drools.setFocus("HomemFilhos"); 
+end
+
+rule "Mulher"
 no-loop
 salience 60
 when
 	$f:Fatura( nItems > 0 )
-	$c:Clientes( filhos == true )
+	$c:Clientes( filhos == true && sexo == "feminino")
 then
-	if  ( $c.getSexo() == "masculino" )
-		drools.setFocus("HomemFilhos"); 
-		
-	if  ( $c.getSexo() == "feminino" )
-		drools.setFocus("MulherFilhos");
-		
-	//implementar compra
+	drools.setFocus("MulherFilhos");
 end
 
 rule "Homem com filhos"

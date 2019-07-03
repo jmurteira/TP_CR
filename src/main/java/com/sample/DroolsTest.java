@@ -19,7 +19,7 @@ public class DroolsTest {
             // go !
         	
         	
-        	Items i1 = new Items(1,"Casaco","adulto","masculino",(float)40.00, 15, 0);
+        	Items i1 = new Items(1,"Casaco","adulto","masculino",(float)40.00, 0, 0);
         	Items i2 = new Items(2,"Sapatos","adulto","feminino",(float)50.00, 25, 6);
         	Items i3 = new Items(3,"Ténis","adulto","masculino",(float)60.00, 12, 7);
         	Items i4 = new Items(4,"Camisa","criança","ambos",(float)70.00, 3, 0);

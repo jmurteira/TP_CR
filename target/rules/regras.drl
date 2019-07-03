@@ -152,6 +152,25 @@ then
 		drools.setFocus("Atualiza");
 end
 
+/*
+rule "Verifica Stock"
+agenda-group "Verifica"
+when
+	$f:Fatura()
+	$c:Clientes()
+	$i:Items( id == $f.getIdAtual() && $i.getStock() == 0 )
+then
+	if( $f.getIdAtual() == $i.getId() && $i.getStock() == 0 )
+		System.out.printf("\nIntroduzio um item que não está disponível, finalizando assim a compra.");
+	if( $f.getIdAtual() == $i.getId()  && $i.getSexo() != $c.getSexo() )
+		System.out.printf("\nIntroduzio um item que não corresponde ao seu género, finalizando assim a compra.");
+	if( $f.getIdAtual() == $i.getId() && $i.getStock() > 0 && $i.getSexo() == $c.getSexo() )
+		drools.setFocus("Atualiza");
+end
+
+rule "Verifica Genero"
+*/
+
 rule "Atualiza Fatura e Stock"
 no-loop
 agenda-group "Atualiza"
@@ -190,6 +209,7 @@ when
 then
 	drools.setFocus("MulherFilhos");
 end
+
 
 rule "Homem com filhos"
 no-loop

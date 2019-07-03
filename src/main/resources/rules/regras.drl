@@ -194,7 +194,7 @@ salience 68
 when
 	$f:Fatura( idAtual != 0 && sexoOposto == false )
 	$c:Clientes()
-	$i:Items( id == $f.getIdAtual() && $i.getSexo() != $c.getSexo() )
+	$i:Items( id == $f.getIdAtual() && $i.getSexo() != $c.getSexo() && $i.getSexo() != "ambos" )
 then
 	System.out.printf("\nIntroduziu um item que não corresponde ao seu género.\n");
 	drools.setFocus("MaisItems");

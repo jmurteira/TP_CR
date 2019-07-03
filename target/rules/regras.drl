@@ -279,6 +279,14 @@ then
         }
 end
 
+rule "Terminar Compra Vazia"
+salience 2
+when
+	$f:Fatura( nItems == 0 )
+then
+	System.out.println("\nCompra cancelada!");
+end
+
 rule "Terminar Compra"
 salience 1
 when

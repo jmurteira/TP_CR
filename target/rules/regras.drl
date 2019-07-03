@@ -197,7 +197,7 @@ end
 
 rule "Solteiro sem filhos?"
 no-loop
-salience 59
+salience 58
 when
 	$f:Fatura( nItems > 0 )
 	$c:Clientes( estado_civil == "solteiro" && filhos == false )

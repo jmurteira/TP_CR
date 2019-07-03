@@ -323,7 +323,7 @@ when
 	$i1:Items( id == $f.getIdAtual() )
 	$i2:Items( nome == $i1.getNome() && sexo != $i1.getSexo() )
 then
-	System.out.println("Deseja comprar "  + $i2.getNome()+ " " + $i2.getSexo() + "? (S/N)");
+	System.out.println("Deseja comprar "  + $i2.getNome()+ " " + $i2.getSexo() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
 		
@@ -351,7 +351,7 @@ when
 	$i1:Items( id == $f.getIdAtual() )
 	$i2:Items( id == $i1.getComplementar() )
 then
-	System.out.println("Deseja comprar " + $i2.getNome() + "? (S/N)");
+	System.out.println("Deseja comprar " + $i2.getNome() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
 		

@@ -31,8 +31,8 @@ public class DroolsTest {
         	Items i10 = new Items(10,"Casaco","adulto","feminino",(float)40.00, 20, 12);
         	Items i11 = new Items(11,"Camisola","adulto","feminino",(float)70.00, 14, 10);
         	Items i12 = new Items(12,"Camisa","adulto","feminino",(float)70.00, 3, 11);
-        	Items i13 = new Items(13,"Sapatos","adulto","masculino",(float)50.00, 25, 7);
-        	Items i14 = new Items(14,"Ténis","adulto","feminino",(float)60.00, 12, 6);
+        	Items i13 = new Items(13,"Sapatos","adulto","masculino",(float)50.00, 0, 7);
+        	Items i14 = new Items(14,"Ténis","adulto","feminino",(float)60.00, 0, 6);
         	kSession.insert(i1);
         	kSession.insert(i2);
         	kSession.insert(i3);

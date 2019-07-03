@@ -184,7 +184,7 @@ then
 	//implementar compra
 end
 
-rule "É casado?"
+rule "Casado sem filhos?"
 no-loop
 salience 59
 when
@@ -192,6 +192,17 @@ when
 	$c:Clientes( estado_civil == "casado" && filhos == false )
 then
 	System.out.println("AMO TE");
+	//implementar compra
+end
+
+rule "Solteiro sem filhos?"
+no-loop
+salience 59
+when
+	$f:Fatura( nItems > 0 )
+	$c:Clientes( estado_civil == "solteiro" && filhos == false )
+then
+	System.out.println("SÓ PARA MIM");
 	//implementar compra
 end
 

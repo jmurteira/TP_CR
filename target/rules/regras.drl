@@ -99,7 +99,7 @@ when
         {
         
         	//criar fatura nova
-        	insert ( new Fatura(0,0,0) );
+        	insert ( new Fatura(0,0,0,false) );
         	//drools.setFocus("Mostrar");        	
         }	
 end
@@ -140,7 +140,7 @@ rule "Atualiza Fatura e Stock"
 no-loop
 salience 69
 when
-	$f:Fatura()
+	$f:Fatura( idAtual != 8 && idAtual != 9 )
 	$i:Items( id == $f.getIdAtual() )
 then
 	$f.setnItems($f.getnItems() + 1 );
@@ -175,52 +175,44 @@ rule "Homem com filhos"
 no-loop
 agenda-group "HomemFilhos"
 when
-	$f:Fatura( nItems > 0 && idAtual != 8)
+	$f:Fatura( nItems > 0 && idAtual != 8 && camisola == false)
 	$i:Items( id==8 )
 then
 	System.out.println("Deseja comprar uma camisola para o seu filho \"O MEU PAPA É O MELHOR\"? (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
 		
-		if(resposta == 'N' || resposta == 'n')
-        {
-        	System.out.println("NUMERO DE ITEMS: " + $f.getnItems());
-        	System.out.println("PRECO TOTAL A PAGAR: " + $f.getPrecoTotal());
-        }
-        if(resposta == 'S' || resposta == 's')
+		if(resposta == 'S' || resposta == 's')
         {
         	$f.setIdAtual(8);
 			$f.setnItems($f.getnItems() + 1 );
 			$f.setPrecoTotal($f.getPrecoTotal() + $i.getPreco() );
+			$f.setCamisola(true);
 			$i.setStock($i.getStock() - 1 );
 			update($f);
 			update($i);
 			System.out.println("Item Adicionado: " + $i.getNome() + ", Preço: " + $i.getPreco());
 			System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());
-        }	
+        }
 end
 
 rule "Mulher com filhos"
 no-loop
 agenda-group "MulherFilhos"
 when
-	$f:Fatura( nItems > 0 && idAtual != 9)
+	$f:Fatura( nItems > 0 && idAtual != 9 && camisola == false)
 	$i:Items( id==9 )
 then
 	System.out.println("Deseja comprar uma camisola para o seu filho \"A MINHA MAE É A MELHOR\"? ");
 	char resposta;
 	resposta = (char)System.in.read();
 		
-		if(resposta == 'N' || resposta == 'n')
-        {
-        	System.out.println("NUMERO DE ITEMS: " + $f.getnItems());
-        	System.out.println("PRECO TOTAL A PAGAR: " + $f.getPrecoTotal());
-        }
-        if(resposta == 'S' || resposta == 's')
+		if(resposta == 'S' || resposta == 's')
         {
         	$f.setIdAtual(9);
 			$f.setnItems($f.getnItems() + 1 );
 			$f.setPrecoTotal($f.getPrecoTotal() + $i.getPreco() );
+			$f.setCamisola(true);
 			$i.setStock($i.getStock() - 1 );
 			update($f);
 			update($i);
@@ -255,12 +247,7 @@ then
 	char resposta;
 	resposta = (char)System.in.read();
 		
-		if(resposta == 'N' || resposta == 'n')
-        {
-        	System.out.println("NUMERO DE ITEMS: " + $f.getnItems());
-        	System.out.println("PRECO TOTAL A PAGAR: " + $f.getPrecoTotal());
-        }
-        if(resposta == 'S' || resposta == 's')
+		if(resposta == 'S' || resposta == 's')
         {
         	$f.setIdAtual($i2.getId());
 			$f.setnItems($f.getnItems() + 1 );
@@ -271,6 +258,15 @@ then
 			System.out.println("Item Adicionado: " + $i2.getNome() + ", Preço: " + $i2.getPreco());
 			System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());       	
         }
+end
+
+rule "Terminar Compra"
+salience 1
+when
+	$f:Fatura( nItems > 0 )
+then
+	System.out.println("NUMERO DE ITEMS: " + $f.getnItems());
+    System.out.println("PRECO TOTAL A PAGAR: " + $f.getPrecoTotal());
 end
 
 /*

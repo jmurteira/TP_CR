@@ -136,7 +136,7 @@ no-loop
 		//System.out.printf("ID FATURA: " + $f.getIdAtual());
 		
 end
-
+/*
 rule "Verifica Stock"
 agenda-group "Verifica"
 when
@@ -151,25 +151,47 @@ then
 	if( $f.getIdAtual() == $i.getId() && $i.getStock() > 0 && $i.getSexo() == $c.getSexo() )
 		drools.setFocus("Atualiza");
 end
-
-/*
-rule "Verifica Stock"
-agenda-group "Verifica"
+*/
+rule "Não Verifica Stock"
+salience 69
 when
 	$f:Fatura()
 	$c:Clientes()
 	$i:Items( id == $f.getIdAtual() && $i.getStock() == 0 )
 then
-	if( $f.getIdAtual() == $i.getId() && $i.getStock() == 0 )
-		System.out.printf("\nIntroduzio um item que não está disponível, finalizando assim a compra.");
-	if( $f.getIdAtual() == $i.getId()  && $i.getSexo() != $c.getSexo() )
-		System.out.printf("\nIntroduzio um item que não corresponde ao seu género, finalizando assim a compra.");
-	if( $f.getIdAtual() == $i.getId() && $i.getStock() > 0 && $i.getSexo() == $c.getSexo() )
-		drools.setFocus("Atualiza");
+	System.out.printf("\nIntroduziu um item que não está disponível, finalizando assim a compra.");	
 end
 
+rule "Verifica Stock"
+agenda-group "Verifica"
+when
+	$f:Fatura()
+	$c:Clientes()
+	$i:Items( id == $f.getIdAtual() && $i.getStock() > 0 )
+then
+	drools.setFocus("VerificaGen");
+end
+
+rule "Não Verifica Genero"
+salience 68
+when
+	$f:Fatura()
+	$c:Clientes()
+	$i:Items( id == $f.getIdAtual() && $i.getSexo() != $c.getSexo() )
+then
+	System.out.printf("\nIntroduziu um item que não corresponde ao seu género, finalizando assim a compra.");
+end
+
+
 rule "Verifica Genero"
-*/
+agenda-group "VerificaGen"
+when
+	$f:Fatura()
+	$c:Clientes()
+	$i:Items( id == $f.getIdAtual() && $i.getSexo() == $c.getSexo() )
+then
+	drools.setFocus("Atualiza");
+end
 
 rule "Atualiza Fatura e Stock"
 no-loop

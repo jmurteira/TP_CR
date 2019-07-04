@@ -7,9 +7,9 @@ public class Fatura {
 	boolean camisola;
 	boolean complementar;
 	boolean sexoOposto;
-	
-	public Fatura(int nItems, float precoTotal, int idAtual, boolean camisola, boolean complementar,
-			boolean sexoOposto) {
+	boolean naoExiste;
+	public Fatura(int nItems, float precoTotal, int idAtual, boolean camisola, boolean complementar, boolean sexoOposto,
+			boolean naoExiste) {
 		super();
 		this.nItems = nItems;
 		PrecoTotal = precoTotal;
@@ -17,6 +17,7 @@ public class Fatura {
 		this.camisola = camisola;
 		this.complementar = complementar;
 		this.sexoOposto = sexoOposto;
+		this.naoExiste = naoExiste;
 	}
 	public int getnItems() {
 		return nItems;
@@ -54,6 +55,14 @@ public class Fatura {
 	public void setSexoOposto(boolean sexoOposto) {
 		this.sexoOposto = sexoOposto;
 	}
+	public boolean isNaoExiste() {
+		return naoExiste;
+	}
+	public void setNaoExiste(boolean naoExiste) {
+		this.naoExiste = naoExiste;
+	}
+	
+	
 	
 	
 }

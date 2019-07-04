@@ -108,7 +108,7 @@ when
         {
         
         	//criar fatura nova
-        	insert ( new Fatura(0,0,0,false,false,false) );
+        	insert ( new Fatura(0,0,0,false,false,false,false) );
         	drools.setFocus("Mostrar");        	
         }	
 end
@@ -136,12 +136,12 @@ no-loop
 		Scanner ler = new Scanner(System.in);
 		id = ler.nextInt();
 		
-		if ( id != 0 )
-		{		
+		//if ( id != 0 )
+		//{		
 			$f.setIdAtual(id);
 			update($f);
 			drools.setFocus("Verifica");
-		}
+		//}
 		
 		//if ( id == 0)
 		//{
@@ -166,9 +166,18 @@ then
 		drools.setFocus("Atualiza");
 end
 */
+rule "Verifica Existencia Item"
+agenda-group "Verifica"
+when
+	$f:Fatura(idAtual != 0)
+	$c:Clientes()
+	$i:Items(id == $f.getIdAtual())
+then
+	drools.setFocus("VerificaStock");
+end
 
 rule "Verifica Stock"
-agenda-group "Verifica"
+agenda-group "VerificaStock"
 when
 	$f:Fatura( idAtual != 0 )
 	$c:Clientes()
@@ -200,6 +209,27 @@ then
 	drools.setFocus("MaisItems");
 end
 
+rule "Compara Items"
+salience 67
+when
+	$f:Fatura(idAtual != 0)
+	$i:Items( id == $f.getIdAtual)
+then
+	$f.setNaoExiste(true);
+	update($f)
+end
+
+rule "Não Existe Item"
+salience 66
+when
+	$f:Fatura(idAtual != 0 && naoExiste == false)
+	//$i:Items( id == $f.getIdAtual )
+then
+	System.out.printf("\nIntroduziu um item que não existe na loja.\n");
+	drools.setFocus("MaisItems");
+end
+
+
 
 rule "Verifica Genero"
 agenda-group "VerificaGen"
@@ -218,8 +248,8 @@ agenda-group "MaisItems"
 	when
 		$f:Fatura()
 	then		
-			update($f);
-			drools.setFocus("Mostrar");
+		update($f);
+		drools.setFocus("Mostrar");
 end
 
 

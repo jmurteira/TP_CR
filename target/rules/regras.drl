@@ -278,7 +278,7 @@ agenda-group "HomemFilhos"
 when
 	$a:Auxiliar()
 	$f:Fatura( nItems > 0 && idAtual != 8 && camisola == false)
-	$i:Items( id==8 )
+	$i:Items( id==8  && getStock() >0)
 then
 	System.out.println("Deseja comprar uma camisola para criança \"O MEU PAPA É O MELHOR\"? Preço: "  + $i.getPreco() + " (S/N)");
 	char resposta;
@@ -311,7 +311,7 @@ agenda-group "MulherFilhos"
 when
 	$a:Auxiliar()
 	$f:Fatura( nItems > 0 && idAtual != 9 && camisola == false)
-	$i:Items( id==9 )
+	$i:Items( id==9  && getStock() >0)
 then
 	System.out.println("Deseja comprar uma camisola para criança \"A MINHA MAE É A MELHOR\"?  Preço: "  + $i.getPreco() + " (S/N)");
 	char resposta;

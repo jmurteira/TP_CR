@@ -79,7 +79,7 @@ rule "Registo de Cliente"
 
 		
         insert (new Clientes(Nome, Sexo, EstadoCivil, Filhos));       
-        insert (new Auxiliar(0,0));
+        insert (new Auxiliar(0,0, true, 0));
         //System.out.println("MOSTRAR DADOS: " + Nome + " " + Sexo + " " + EstadoCivil);        
 end
 
@@ -118,7 +118,6 @@ end
 rule "Mostrar items disponíveis"
 no-loop
 	agenda-group "Mostrar"
-	//salience 80
 	when
 		exists Fatura( nItems == 0)
 		$c:Clientes()
@@ -129,7 +128,7 @@ end
 
 rule "Escolher Item"
 no-loop
-	salience 71
+	salience 80
 	when
 		$f:Fatura()
 		$a:Auxiliar()
@@ -139,24 +138,23 @@ no-loop
 		Scanner ler = new Scanner(System.in);
 		id = ler.nextInt();
 		
-		if ( id != 0 )
-		{		
+		//if ( id != 0 )
+		//{	
 			$f.setIdAtual(id);
 			update($f);
 			drools.setFocus("Verifica");
-		}
+			
+		//}
 		
 		$a.setIdAux(id);
+		
+		if (id != 0){
+			$a.setGuardaUltimoItem(id);
+		}
+		
 		update($a);
 		
-	
 end
-
-
-
-
-
-
 
 rule "Verifica Stock"
 agenda-group "Verifica"
@@ -170,7 +168,7 @@ end
 
 
 rule "Não Verifica Stock"
-salience 69
+salience 75
 when
 	$f:Fatura( idAtual != 0 )
 	$c:Clientes()
@@ -181,7 +179,7 @@ then
 end
 
 rule "Não Verifica Genero"
-salience 68
+salience 74
 when
 	$f:Fatura( idAtual != 0 && sexoOposto == false )
 	$c:Clientes()
@@ -195,11 +193,32 @@ end
 rule "Verifica Genero"
 agenda-group "VerificaGen"
 when
-	$f:Fatura()
+	$f:Fatura(idAtual != 0)
 	$c:Clientes()
 	$i:Items( id == $f.getIdAtual() && $i.getSexo() == $c.getSexo() )
 then
 	drools.setFocus("Atualiza");
+end
+
+rule "Item Existe?"
+no-loop
+salience 72
+when
+	$a:Auxiliar(idAux !=0)
+	$i:Items(id == $a.getIdAux)
+then
+	$a.setNaoExiste(false);
+	update($a);
+end
+
+rule "Item Não Existe?"
+no-loop
+salience 71
+when
+	$a:Auxiliar(idAux !=0 && naoExiste == true)
+then
+	System.out.printf("\nIntroduziu um item que não existe na loja.\n");
+	drools.setFocus("MaisItems");
 end
 
 
@@ -209,8 +228,8 @@ agenda-group "MaisItems"
 	when
 		$f:Fatura()
 	then		
-			update($f);
-			drools.setFocus("Mostrar");
+		update($f);
+		drools.setFocus("Mostrar");
 end
 
 
@@ -252,10 +271,6 @@ when
 then
 	drools.setFocus("MulherFilhos");
 end
-
-
-
-
 
 rule "Homem com filhos"
 no-loop
@@ -326,10 +341,11 @@ rule "Casado sem filhos?"
 no-loop
 salience 59
 when
+	$a:Auxiliar()
 	$f:Fatura( nItems > 0 && sexoOposto == false)
 	$c:Clientes( estado_civil == "casado" && filhos == false )
-	$i1:Items( id == $f.getIdAtual() )
-	$i2:Items( nome == $i1.getNome() && sexo != $i1.getSexo() )
+	$i1:Items( id == $a.getGuardaUltimoItem() )
+	$i2:Items( nome == $i1.getNome() && sexo != $i1.getSexo() && getStock() >0 )
 then
 	System.out.println("Deseja comprar "  + $i2.getNome()+ " " + $i2.getSexo() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
@@ -354,10 +370,11 @@ rule "Solteiro sem filhos?"
 no-loop
 salience 58
 when
+	$a:Auxiliar()
 	$f:Fatura( nItems > 0 && complementar == false )
 	$c:Clientes( estado_civil == "solteiro" && filhos == false )
-	$i1:Items( id == $f.getIdAtual() )
-	$i2:Items( id == $i1.getComplementar() )
+	$i1:Items( id == $a.getGuardaUltimoItem() )
+	$i2:Items( id == $i1.getComplementar() && getStock() > 0)
 then
 	System.out.println("Deseja comprar " + $i2.getNome() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
@@ -382,10 +399,10 @@ no-loop
 salience 57
 when
 	$f:Fatura(nItems > 0 && sexoOposto == false && camisolaCrianca == true)
-	$c:Clientes( estado_civil == "casado" && filhos == true )
-	$i1:Items( id == $f.getIdAtual() )
-	$i2:Items( nome == $i1.getNome() && sexo != $i1.getSexo() )
 	$a:Auxiliar(compraAposCrianca != $f.getnItems)
+	$c:Clientes( estado_civil == "casado" && filhos == true )
+	$i1:Items( id == $a.getGuardaUltimoItem() )
+	$i2:Items( nome == $i1.getNome() && sexo != $i1.getSexo() && getStock() > 0)
 then
 	System.out.println("Deseja comprar "  + $i2.getNome()+ " " + $i2.getSexo() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
@@ -410,10 +427,10 @@ no-loop
 salience 56
 when
 	$f:Fatura( nItems > 0 && complementar == false && camisolaCrianca == true)
-	$c:Clientes( estado_civil == "solteiro" && filhos == true )
-	$i1:Items( id == $f.getIdAtual() )
-	$i2:Items( id == $i1.getComplementar() )
 	$a:Auxiliar(compraAposCrianca != $f.getnItems)
+	$c:Clientes( estado_civil == "solteiro" && filhos == true )
+	$i1:Items( id == $a.getGuardaUltimoItem() )
+	$i2:Items( id == $i1.getComplementar()  && getStock() > 0)
 then
 	System.out.println("Deseja comprar " + $i2.getNome() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;

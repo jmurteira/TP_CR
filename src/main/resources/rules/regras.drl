@@ -277,10 +277,11 @@ then
 	System.out.println("Deseja comprar uma camisola para criança \"O MEU PAPA É O MELHOR\"? Preço: "  + $i.getPreco() + " (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
+
+		if(resposta == 'N' || resposta == 'n'){
+			drools.setFocus("Acaba");
+		} 
 		
-		
-		$f.setCamisolaCrianca(true);
-		update($f);
 		
 		if(resposta == 'S' || resposta == 's')
         {
@@ -294,6 +295,9 @@ then
 			System.out.println("Item Adicionado: " + $i.getNome() + ", Preço: " + $i.getPreco());
 			System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());
         }
+        		
+		$f.setCamisolaCrianca(true);
+		update($f);
         
         $a.setCompraAposCrianca($f.getnItems());
         update($a);
@@ -305,14 +309,15 @@ agenda-group "MulherFilhos"
 when
 	$a:Auxiliar()
 	$f:Fatura( nItems > 0 && idAtual != 9 && camisola == false)
-	$i:Items( id==9  && getStock() >0)
+	$i:Items( id==9  && getStock() > 0)
 then
 	System.out.println("Deseja comprar uma camisola para criança \"A MINHA MAE É A MELHOR\"?  Preço: "  + $i.getPreco() + " (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
 		
-		$f.setCamisolaCrianca(true);
-		update($f);
+		if(resposta == 'N' || resposta == 'n'){
+			drools.setFocus("Acaba");
+		} 
 		
 		if(resposta == 'S' || resposta == 's')
         {
@@ -326,6 +331,9 @@ then
 			System.out.println("Item Adicionado: " + $i.getNome() + ", Preço: " + $i.getPreco());
 			System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());          	
         }
+        
+        $f.setCamisolaCrianca(true);
+		update($f);
         
         $a.setCompraAposCrianca($f.getnItems());
         update($a);	
@@ -344,6 +352,10 @@ then
 	System.out.println("Deseja comprar "  + $i2.getNome()+ " " + $i2.getSexo() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
+		
+		if(resposta == 'N' || resposta == 'n'){
+			drools.setFocus("Acaba");
+		} 
 		
 		if(resposta == 'S' || resposta == 's')
         {
@@ -374,6 +386,10 @@ then
 	char resposta;
 	resposta = (char)System.in.read();
 		
+		if(resposta == 'N' || resposta == 'n'){
+			drools.setFocus("Acaba");
+		} 
+		
 		if(resposta == 'S' || resposta == 's')
         {
         	$f.setIdAtual($i2.getId());
@@ -402,6 +418,10 @@ then
 	char resposta;
 	resposta = (char)System.in.read();
 		
+		if(resposta == 'N' || resposta == 'n'){
+			drools.setFocus("Acaba");
+		} 
+		
 		if(resposta == 'S' || resposta == 's')
         {
         	$f.setIdAtual($i2.getId());
@@ -429,6 +449,10 @@ then
 	System.out.println("Deseja comprar " + $i2.getNome() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
+		
+		if(resposta == 'N' || resposta == 'n'){
+			drools.setFocus("Acaba");
+		} 
 		
 		if(resposta == 'S' || resposta == 's')
         {
@@ -461,10 +485,22 @@ then
 	System.out.println("\nCompra cancelada!");
 end
 
+
+rule "Termina"
+agenda-group "Acaba"
+when
+	$f:Fatura()
+then
+	System.out.println("\nFinal da compra");
+	System.out.println("NUMERO DE ITEMS: " + $f.getnItems());
+    System.out.println("PRECO TOTAL A PAGAR: " + $f.getPrecoTotal());
+    System.exit(0);
+end
+
 rule "Terminar Compra"
 salience 1
 when
-	$f:Fatura( nItems > 0 )
+	$f:Fatura( nItems > 0)
 then
 	System.out.println("\nFinal da compra");
 	System.out.println("NUMERO DE ITEMS: " + $f.getnItems());

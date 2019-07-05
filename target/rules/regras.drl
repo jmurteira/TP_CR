@@ -138,14 +138,8 @@ no-loop
 		Scanner ler = new Scanner(System.in);
 		id = ler.nextInt();
 		
-		//if ( id != 0 )
-		//{	
-			$f.setIdAtual(id);
-			update($f);
-			drools.setFocus("Verifica");
-			
-		//}
-		
+		$f.setIdAtual(id);
+		update($f);
 		$a.setIdAux(id);
 		
 		if (id != 0){
@@ -153,7 +147,8 @@ no-loop
 		}
 		
 		update($a);
-		
+				
+		drools.setFocus("Verifica");
 end
 
 rule "Verifica Stock"
@@ -248,7 +243,6 @@ then
 	update($i);
 	
 	System.out.println("Item Adicionado: " + $i.getNome() + ", Preço: " + $i.getPreco());
-	//System.out.println("ITEMS: " + $f.getnItems());
 	System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());
 end
 

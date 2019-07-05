@@ -2,6 +2,7 @@
 import com.sample.Clientes;
 import com.sample.Items;
 import com.sample.Fatura;
+import com.sample.Auxiliar;
 import java.util.Scanner;
 
 
@@ -76,8 +77,9 @@ rule "Registo de Cliente"
         if(f == 'n' || f == 'N')
             Filhos = false;
 
-
+		
         insert (new Clientes(Nome, Sexo, EstadoCivil, Filhos));       
+        insert (new Auxiliar(0,0));
         //System.out.println("MOSTRAR DADOS: " + Nome + " " + Sexo + " " + EstadoCivil);        
 end
 
@@ -130,6 +132,7 @@ no-loop
 	salience 71
 	when
 		$f:Fatura()
+		$a:Auxiliar()
 	then		
 		int id;
 		System.out.printf("Informe o ID da peça (0 para sair): ");
@@ -143,29 +146,17 @@ no-loop
 			drools.setFocus("Verifica");
 		}
 		
-		//if ( id == 0)
-		//{
-		//	drools.setFocus("CancelaCompra");					
-		//}
+		$a.setIdAux(id);
+		update($a);
 		
-		//System.out.printf("ID FATURA: " + $f.getIdAtual());	
+	
 end
-/*
-rule "Verifica Stock"
-agenda-group "Verifica"
-when
-	$f:Fatura()
-	$c:Clientes()
-	$i:Items()
-then
-	if( $f.getIdAtual() == $i.getId() && $i.getStock() == 0 )
-		System.out.printf("\nIntroduzio um item que não está disponível, finalizando assim a compra.");
-	if( $f.getIdAtual() == $i.getId()  && $i.getSexo() != $c.getSexo() )
-		System.out.printf("\nIntroduzio um item que não corresponde ao seu género, finalizando assim a compra.");
-	if( $f.getIdAtual() == $i.getId() && $i.getStock() > 0 && $i.getSexo() == $c.getSexo() )
-		drools.setFocus("Atualiza");
-end
-*/
+
+
+
+
+
+
 
 rule "Verifica Stock"
 agenda-group "Verifica"
@@ -270,12 +261,14 @@ rule "Homem com filhos"
 no-loop
 agenda-group "HomemFilhos"
 when
+	$a:Auxiliar()
 	$f:Fatura( nItems > 0 && idAtual != 8 && camisola == false)
 	$i:Items( id==8 )
 then
 	System.out.println("Deseja comprar uma camisola para criança \"O MEU PAPA É O MELHOR\"? Preço: "  + $i.getPreco() + " (S/N)");
 	char resposta;
 	resposta = (char)System.in.read();
+		
 		
 		$f.setCamisolaCrianca(true);
 		update($f);
@@ -293,12 +286,15 @@ then
 			System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());
         }
         
+        $a.setCompraAposCrianca($f.getnItems());
+        update($a);
 end
 
 rule "Mulher com filhos"
 no-loop
 agenda-group "MulherFilhos"
 when
+	$a:Auxiliar()
 	$f:Fatura( nItems > 0 && idAtual != 9 && camisola == false)
 	$i:Items( id==9 )
 then
@@ -320,7 +316,10 @@ then
 			update($i);
 			System.out.println("Item Adicionado: " + $i.getNome() + ", Preço: " + $i.getPreco());
 			System.out.println("PRECO TOTAL: " + $f.getPrecoTotal());          	
-        }	
+        }
+        
+        $a.setCompraAposCrianca($f.getnItems());
+        update($a);	
 end
 
 rule "Casado sem filhos?"
@@ -382,10 +381,11 @@ rule "Casado com filhos apos camisola crianca?"
 no-loop
 salience 57
 when
-	$f:Fatura( nItems > 0 && sexoOposto == false && camisolaCrianca == true)
+	$f:Fatura(nItems > 0 && sexoOposto == false && camisolaCrianca == true)
 	$c:Clientes( estado_civil == "casado" && filhos == true )
 	$i1:Items( id == $f.getIdAtual() )
 	$i2:Items( nome == $i1.getNome() && sexo != $i1.getSexo() )
+	$a:Auxiliar(compraAposCrianca != $f.getnItems)
 then
 	System.out.println("Deseja comprar "  + $i2.getNome()+ " " + $i2.getSexo() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
@@ -413,6 +413,7 @@ when
 	$c:Clientes( estado_civil == "solteiro" && filhos == true )
 	$i1:Items( id == $f.getIdAtual() )
 	$i2:Items( id == $i1.getComplementar() )
+	$a:Auxiliar(compraAposCrianca != $f.getnItems)
 then
 	System.out.println("Deseja comprar " + $i2.getNome() + "? Preço: "  + $i2.getPreco() + " (S/N)");
 	char resposta;
